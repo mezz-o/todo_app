@@ -2,19 +2,24 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\TodoRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TodoController extends AbstractController
 {
     /**
      * @Route("/", name="app_home")
      */
-    public function index(): Response
+    public function index(TodoRepository $todo): Response
     {
-        return $this->render('todo/index.html.twig', [
-            'controller_name' => 'TodoController',
-        ]);
+
+        $todos= $todo->findAll();
+
+        return $this->render('todo/index.html.twig', compact('todos') );
     }
+
+
 }
