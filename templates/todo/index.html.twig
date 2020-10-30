@@ -5,15 +5,22 @@
 {% block body %}
 
 <div>
-    <h1>Todo List:</h1>
-
-{{include('/todo/_form.html.twig')}}
+   
+  <div class="card-header-tab card-header">
+   <h1>Todo List</h1>
+            </div>
+{{include('/todo/_form.html.twig', {textSubmit:"Add Task"})}} <br />
 {% for todo in todos %}
-<ul>
-<li>
+<div class="main row d-flex justify-content-center container">
+    <div class="col-md-8">
+        <div class="card-hover-shadow-2x mb-3 card">
+          
 {{ todo.title }}
-</li>
-</ul>
+
+<a href="{{ path("app_todo_edit", {id:todo.id}) }}">Edit</a>
+<a href="{{ path("app_todo_delete", {id:todo.id}) }}" onclick="return confirm('Are you sure?')" >Delete</a>
+</div>
+</div>
 {% endfor %}
 
 </div>

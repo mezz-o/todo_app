@@ -33,11 +33,45 @@ class TodoController extends AbstractController
             $this->addFlash('success', 'New task created!');
         }
         //Query data
-        $todos = $task->findAll();
+        $todos = $task->findBy([]);
 
         return $this->render('todo/index.html.twig', [
             'todos' => $todos,
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("/edit/{id<[0-9]+>}", name="app_todo_edit", methods="GET|PUT")
+     */
+    public function update(
+        Todo $todo,
+        Request $req,
+        EntityManagerInterface $em
+    ): Response {
+        $form = $this->createForm(TodoType::class, $todo, ['method' => 'PUT']);
+        $form->handleRequest($req);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+
+            return $this->redirectToRoute('app_home');
+        }
+        return $this->render('todo/edit.html.twig', [
+            'form' => $form->createView(),
+            'todo' => $todo,
+        ]);
+    }
+
+    /**
+     * @Route("/delete/{id<[0-9]+>}", name="app_todo_delete", methods="DELETE|GET")
+     */
+    public function delete(Todo $todo, EntityManagerInterface $em): Response
+    {
+
+        $em->remove($todo);
+        $em->flush();
+       return $this->redirectToRoute("app_home");
+
     }
 }
