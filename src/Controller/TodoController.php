@@ -61,17 +61,15 @@ class TodoController extends AbstractController
             'form' => $form->createView(),
             'todo' => $todo,
         ]);
+        
     }
-
     /**
      * @Route("/delete/{id<[0-9]+>}", name="app_todo_delete", methods="DELETE|GET")
      */
     public function delete(Todo $todo, EntityManagerInterface $em): Response
     {
-
         $em->remove($todo);
         $em->flush();
-       return $this->redirectToRoute("app_home");
-
+        return $this->redirectToRoute('app_home');
     }
 }
